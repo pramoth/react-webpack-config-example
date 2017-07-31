@@ -1,41 +1,36 @@
 var webpack = require("webpack")
+var path = require("path")
+var BUILD_DIR = path.join(__dirname, "build")
+var APP_DIR = path.join(__dirname, "src")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
-        entry: "./index.js",
+        entry: APP_DIR + "/index.js",
         output: {
+            path: BUILD_DIR,
             publicPath: '/',
-            filename: "./build/bundle.js"
+            filename: "bundle.js"
         },
         devtool: 'source-map',
         devServer: {
-            contentBase: "./build",
+            contentBase: BUILD_DIR,
             port: 3000
         },
         module: {
             rules: [{
-                    test: /\.js$/,
-                    use: {
-                        loader: "babel-loader",
-                        options: {
-                            presets: ["es2015", "stage-2"]
-                        }
+                test: /\.js$/,
+                include: APP_DIR,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["es2015", "stage-2"]
                     }
-                },
-                {
-                    test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                    exclude: /(node_modules|bower_components)/,
-                    loader: "file-loader"
-                },
-            ]
+                }
+            }]
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: './index.html',
-                files: {
-                    css: ['style.css'],
-                    js: ["bundle.js"],
-                }
+                template: APP_DIR + '/index.html'
             })
         ]
     }
